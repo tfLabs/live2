@@ -49,17 +49,18 @@ public class Preview {
 								setText(resource);
 							}
 						});
-						ITextSelection selection = (ITextSelection) x.getSelectionProvider().getSelection();
-						final int offset = selection.getOffset();
+						int offset = 0;
 						EObject object = d.readOnly(new IUnitOfWork<EObject, XtextResource>() {
-							// @Override
+							@Override
 							public EObject exec(XtextResource state) throws Exception {
 								return helper.resolveContainedElementAt(state, offset);
 							}
 						});
-						Resource r = object.eResource();
-						if (r instanceof XtextResource) {
-							setText((XtextResource) r);
+						if (object != null) {
+							Resource r = object.eResource();
+							if (r instanceof XtextResource) {
+								setText((XtextResource) r);
+							}
 						}
 					}
 				}
@@ -90,18 +91,19 @@ public class Preview {
 			public void partActivated(IWorkbenchPart arg0) {
 				if (arg0 instanceof XtextEditor) {
 					XtextEditor x = (XtextEditor) arg0;
-					ITextSelection selection = (ITextSelection) x.getSelectionProvider().getSelection();
-					final int offset = selection.getOffset();
+					int offset = 0;
 					IXtextDocument d = x.getDocument();
 					EObject object = d.readOnly(new IUnitOfWork<EObject, XtextResource>() {
-						// @Override
+						@Override
 						public EObject exec(XtextResource state) throws Exception {
 							return helper.resolveContainedElementAt(state, offset);
 						}
 					});
-					Resource r = object.eResource();
-					if (r instanceof XtextResource) {
-						setText((XtextResource) r);
+					if (object != null) {
+						Resource r = object.eResource();
+						if (r instanceof XtextResource) {
+							setText((XtextResource) r);
+						}
 					}
 				}
 				
@@ -112,7 +114,8 @@ public class Preview {
 	
 	@PostConstruct
     public void createControls(Composite parent) {
-		text = new Text(parent, SWT.BORDER | SWT.MULTI);
+		text = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL);
+		text.setBackground(new Color(parent.getDisplay(), 255, 255, 255));
 	}
 	
     private void setText(XtextResource resource) {
