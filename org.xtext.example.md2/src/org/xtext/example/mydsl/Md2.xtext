@@ -1,0 +1,9 @@
+grammar org.xtext.example.mydsl.Md2 with org.eclipse.xtext.common.Terminals
+
+generate md2 "http://www.xtext.org/example/mydsl/Md2"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';
